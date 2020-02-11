@@ -1,0 +1,439 @@
+/*** Mixins  ***/
+@mixin object($width, $height, $background){
+  width: $width;
+  height: $height;
+  background: $background;
+}
+
+@mixin transPos($top, $right, $bottom, $left, $transX, $transY){
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  transform: translate($transX, $transY);
+}
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*** Default Styles ***/
+
+body {
+	overflow-x: hidden;
+  overflow-y: scroll;
+  font-family: 'Roboto';
+}
+
+a {
+  text-decoration: none;
+}
+
+@font-face {
+	font-family: "hacked";
+	src: url('../fonts/hacked/HACKED_Title.ttf');
+}
+
+@font-face {
+	font-family: "typographpro";
+	src: url('../fonts/TypographPRO/TYPOGRAPH_PRO_Semi_Bold.ttf');
+}
+
+/*** Color Variables ***/
+$color-f: #021226;
+$color-s: #fff;
+$color-t: #f6f6f6;
+
+
+/*** header ***/
+header {
+  @include object(100vw, 100vh, $color-s);
+  display: flex;
+
+  /*** nav ***/
+  nav {
+    @include object(100vw, 140px, $color-f);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    position: fixed;
+    z-index: 10;
+    transition: all 0.3s;
+
+    &.navShadow {
+      box-shadow: 0 4px 30px -5px rgba($color-s, 0.2);
+      height: 100px;
+      #word-mark {
+        opacity: 0;
+      }
+    }
+
+    /*** brand ***/
+    #brand, #menu {
+      display: flex;
+      align-items: center;
+    }
+
+    #brand {
+      padding-left: 40px;
+      #logo {
+        @include object(55px, 55px, $color-s);
+        border-radius: 50%;
+        background-image: url('../images/icon/android-icon-144x144.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+      }
+
+      #work-mark {
+        @include object(120px, 20px, $color-s);
+        border-radius: 90px;
+        color: $color-f;
+        text-align: center;
+        margin-left: 20px;
+        opacity: 1;
+        transition: all 0.3s;
+      }
+    }
+
+    /*** menu ***/
+    #menu {
+      justify-content: flex-end;
+      padding-right: 40px;
+
+      #menu-toggle {
+        @include object(55px, 55px, darken($color-s, 5%));
+        @include center;
+        border-radius: 90px;
+        cursor: pointer;
+        display: none;
+
+        #menu-icon {
+          position: relative;
+          .bar {
+            @include object(25px, 2px, $color-f);
+            transition: .3s ease-in-out;
+            &:nth-child(2) {
+              width: 20px;
+              margin: 5px 0;
+            }
+            &:last-child {
+              width: 15px;
+            }
+          }
+        }
+          
+      }
+
+      ul {
+          display: flex;
+          align-items: center;
+        li {
+          position: relative;
+          line-height: 2rem;
+
+          &:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: $color-s;
+            left: 0;
+            bottom: 0;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 650ms cubic-bezier(.68, -.55, .265, 1.55);
+          }
+
+          &:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+          } 
+
+          a {
+            color: $color-s;
+            margin: 0 .5rem;
+            display: block;
+            text-align: center;
+            padding: 1px 0px;
+            outline: none;
+            white-space: nowrap;
+          }
+        }
+      }
+
+    }
+    @media screen and (max-width:767px) {
+
+      #menu {
+        #menu-toggle {
+          display: flex;
+
+          &.closeMenu #menu-icon .bar {
+           width: 25px;
+           &:first-child{transform: translateY(7px) rotate(45deg);}
+           &:nth-child(2){transform: scale(0);}
+           &:last-child{transform: translateY(-7px) rotate(-45deg);}
+          }
+
+          #menu-icon{
+             &:hover .bar {
+                width: 25px;
+              }
+          }
+        }
+        ul {
+          position: absolute;
+          box-shadow: 0 5px 30px -4px rgba($color-s, 0.2);
+          display: flex;
+          flex-direction: column;
+          @include object(60vw, 0, #021226);
+          top: 160px;
+          left: 0px;
+          justify-content: center;
+          align-items: flex-start;
+          transition: all .3s;
+
+          &.showMenu {
+            height: 250px;
+            li {
+              opacity: 1;
+              visibility: visible;
+            }
+          }
+
+          li {
+            padding-left: 0px;
+            margin-left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all .3s 0.1s;
+          }
+
+          a {
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+
+  }
+  #hero-section {
+    @include object(100vw,calc(100vh- 160px), null);
+    @include center;
+    margin-top: 140px;
+    flex-direction: column;
+    
+    h1#head-line {
+      color: $color-f;
+      font-family: 'typographpro';
+      padding: 10px 0;
+      font-size: 1.355em;
+      transition: .5s;
+      transform-origin: right;
+      transform: scaleX(0);
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $color-f;
+        transform-origin: left;
+        transition: .5s;
+      }
+    }
+    @media screen and (min-width:768px) {
+      h1#head-line {
+        font-size: 3.355em
+      }
+    }
+
+    h1#head-line[data-scroll="in"] {
+      transform: scaleX(1);
+
+      &:before {
+        transform: scaleX(0);
+        transition-delay: .5s;;
+      }
+    }
+
+    h2#head-line {
+      position: relative;
+      border-radius: 90px;
+      color: $color-f;
+      font-family: 'typographpro';
+      display: inline-block;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 1.058em;
+      transition: .5s;
+      transform-origin: left;
+      transform: scaleX(0);
+      margin-top: 10px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $color-f;
+        transform-origin: right;
+        transition: .5s;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        cursor: pointer;
+        border-radius: 90px;
+        letter-spacing: .75em;
+        @include object(100px, 10px, $color-f);
+        @include transPos(null, null, -30px, 50%, -50%, 0)
+      }
+    }
+
+    h2#head-line[data-scroll="in"] {
+      transform: scaleX(1);
+
+      &:before {
+        transform: scaleX(0);
+        transition-delay: .5s;;
+      }
+    }
+
+    @media screen and (min-width:768px) {
+
+      h2#head-line {
+        font-size: 3.355em
+      }
+    }
+  }
+}
+/*** section ***/
+section {
+  @include object(100vw, calc(100vh - 140px), null);
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  &:nth-child(even){
+    background-color: $color-f;
+    #heading {
+      @include object(120px, 20px, $color-s);
+    }
+  }
+  &:nth-child(odd){
+    background-color: $color-t;
+    #heading {
+      @include object(120px, 20px, $color-f);
+    }
+  }
+
+  #heading {
+    border-radius: 90px;
+    margin-top: 40px;
+  }
+
+}
+
+#heading[data-scroll] {
+  transition: all 1s;
+}
+
+#heading[data-scroll="in"]{
+  opacity: 1;
+  transform: translateX(0);
+  
+}
+
+#heading[data-scroll="out"]{
+  opacity: 0;
+  transform: translateX(-200px);
+  
+}
+
+#heading[data-scroll="out"]:nth-child(odd){
+  transform: translateX(200px);
+}
+
+/** Section01 **/
+#section00 {
+  position: relative;
+
+  #heading{
+    position: relative;
+   
+  }
+
+  .carre-fond {
+    @include transPos(null, null, 10%, 10%, null, 10%);
+    padding: 5px;
+    position: absolute;
+    height: 200px;
+    width: 500px;
+    background: $color-s;
+    display: flex;
+    align-items: center;
+
+
+    p {
+      line-height: 1.2rem;
+    }
+  }
+  .carre-fond[data-scroll] {
+    transition: all 1.2s;
+  }
+
+  .carre-fond[data-scroll="in"]{
+    transform: translateY(-120%);
+  }
+
+  .carre-fond[data-scroll="out"]{
+    transform: translateY(50%);
+    
+  }
+
+  .wrapper {
+    width: 80%;
+    max-width: 1170px;
+    position: relative;
+    margin: 0 auto;
+    padding: 250px 0 150px;
+
+    .container {
+      padding-left: 20%;
+
+      .container__bigTitle {
+        color: $color-s;
+        font-size: 86px;
+        font-weight: 600;
+        line-height: 97px;
+        font-family: "typographpro";
+      }
+
+      .container__intro {
+          margin: 40px auto;
+          color:$color-s;
+          font-size: 17px;
+          font-weight: 400;
+          line-height: 40px;
+          font-family: "typographpro";
+      }
+    } 
+  }
+
+  @media screen and (max-width:767px) {
+    .carre-fond {
+      width: 250px;
+    }
+
+    .carre-fond[data-scroll="in"]{
+      transform: translateY(-80%);
+    }
+  }
+}
